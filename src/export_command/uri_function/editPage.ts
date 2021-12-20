@@ -4,6 +4,7 @@ import { getDefaultBot } from '../wikimedia_function/bot';
 import { Action, alterNativeValues, Prop, RvProp } from '../wikimedia_function/args';
 import { getPageCode } from '../wikimedia_function/page';
 import { isRemoteBot, parseArgs } from './uri';
+import { i18n, lang } from '../i18n_function/i18n';
 
 export async function editPage(query: string): Promise<void> {
     // vscode-insiders://rowewilsonfrederiskholme.wikitext/PullPage?Title=1
@@ -16,7 +17,7 @@ export async function editPage(query: string): Promise<void> {
     const title: string | undefined = pars['Title'];
 
     if (!title || !tBot) {
-        vscode.window.showErrorMessage(`${!title ? 'title ' : ''}${!tBot ? 'tbot ' : ''}is undefined or empty.`);
+        vscode.window.showErrorMessage(i18n("error-undefined-or-empty", lang, `${!title ? ' title' : ''}${!tBot ? ' tbot' : ''}`));
         return undefined;
     }
 

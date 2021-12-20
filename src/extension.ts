@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as vscode from 'vscode';
-import { getPreview, getPageView } from './export_command/wikimedia_function/view';
+import { getPreview, getPageView, getDiff } from './export_command/wikimedia_function/view';
 import { login, logout } from './export_command/wikimedia_function/bot';
-import { postPage, pullPage, closeEditor } from './export_command/wikimedia_function/page';
+import { postPage, pullPage, pullPageAndReplace, closeEditor } from './export_command/wikimedia_function/page';
 import { baseUriProcess } from './export_command/uri_function/uri';
 import { addWebCite } from './export_command/cite_function/web';
 
@@ -22,10 +22,12 @@ export function activate(context: vscode.ExtensionContext): void {
     context.subscriptions.push(vscode.commands.registerCommand("wikitext.logout", logout));
     // Core
     context.subscriptions.push(vscode.commands.registerCommand("wikitext.readPage", pullPage));
+    context.subscriptions.push(vscode.commands.registerCommand("wikitext.readPageAndReplace", pullPageAndReplace));
     context.subscriptions.push(vscode.commands.registerCommand("wikitext.writePage", postPage));
     context.subscriptions.push(vscode.commands.registerCommand("wikitext.closeEditor", closeEditor));
     // View
     context.subscriptions.push(vscode.commands.registerCommand("wikitext.getPreview", getPreview));
+    context.subscriptions.push(vscode.commands.registerCommand("wikitext.getDiff", getDiff));
     context.subscriptions.push(vscode.commands.registerCommand("wikitext.viewPage", getPageView));
     // Cite
     context.subscriptions.push(vscode.commands.registerCommand("wikitext.citeWeb", addWebCite));

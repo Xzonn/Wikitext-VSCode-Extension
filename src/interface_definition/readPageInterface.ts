@@ -68,7 +68,6 @@ export interface ReadPageResult {
     query?: Query;
     error?: MWError;
     warnings?: MWWarnings;
-
 }
 
 export interface Query {
@@ -120,6 +119,7 @@ export interface Revision {
      * slots.main.*: string
      */
     "*"?: string;
+    diff?: Diff;
 }
 
 export interface Slots {
@@ -129,6 +129,10 @@ export interface Slots {
 export interface Main {
     contentmodel?: string;
     contentformat?: string;
+    "*"?: string;
+}
+
+export interface Diff {
     "*"?: string;
 }
 
@@ -184,6 +188,7 @@ const readPageResultTypeMap: TypeMap = {
         { json: "contentmodel", js: "contentmodel", typ: u(undefined, "") },
         { json: "contentformat", js: "contentformat", typ: u(undefined, "") },
         { json: "*", js: "*", typ: u(undefined, "") },
+        { json: "diff", js: "diff", typ: u(undefined, r("Diff")) },
     ], false),
     "Slots": o([
         { json: "main", js: "main", typ: u(undefined, r("Main")) },
@@ -193,4 +198,7 @@ const readPageResultTypeMap: TypeMap = {
         { json: "contentformat", js: "contentformat", typ: u(undefined, "") },
         { json: "*", js: "*", typ: u(undefined, "") },
     ], false),
+    "Diff": o([
+        { json: "*", js: "*", typ: u(undefined, "") }
+    ], false)
 };

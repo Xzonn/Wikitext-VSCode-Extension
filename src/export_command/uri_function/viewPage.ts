@@ -2,9 +2,10 @@ import * as vscode from 'vscode';
 import MWBot from 'mwbot';
 import { getDefaultBot } from '../wikimedia_function/bot';
 import { Action, alterNativeValues, Prop } from '../wikimedia_function/args';
-import { showViewer } from '../wikimedia_function/view';
+import { getViewParse } from '../wikimedia_function/view';
 import { isRemoteBot, parseArgs } from './uri';
 import { getHost } from '../host_function/host';
+import { i18n, lang } from '../i18n_function/i18n';
 
 export async function viewPage(query: string): Promise<void> {
     function setArgs(par: string, defaultValue?: string): void {
@@ -19,7 +20,7 @@ export async function viewPage(query: string): Promise<void> {
     }) : await getDefaultBot();
 
     if (!tBot) {
-        vscode.window.showErrorMessage("The bot is undefined or empty.");
+        vscode.window.showErrorMessage(i18n("error-undefined-or-empty", lang));
         return undefined;
     }
 
@@ -42,5 +43,5 @@ export async function viewPage(query: string): Promise<void> {
     undefParNames.forEach((value: string): void => setArgs(value));
     setArgs("PST", "true");
 
-    showViewer("pageViewer", "WikiViewer", args, tBot, baseHref);
+    getViewParse("pageViewer", "WikiViewer", args, tBot, baseHref);
 }

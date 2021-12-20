@@ -6,6 +6,7 @@
 import MWBot from 'mwbot';
 import * as vscode from 'vscode';
 import { getHost } from '../host_function/host';
+import { i18n, lang } from '../i18n_function/i18n';
 import { Action } from './args';
 import { showMWErrorMessage } from './err_msg';
 
@@ -23,19 +24,18 @@ export async function login(): Promise<boolean> {
     };
 
     if (!userInfo.username || !userInfo.password) {
-        vscode.window.showWarningMessage("You have not filled in the user name or password, please go to the settings to edit them and try again.");
+        vscode.window.showWarningMessage(i18n("error-no-username-or-password", lang));
         return false;
     }
 
     bot = new MWBot({
         apiUrl: config.get("transferProtocol") + host + config.get("apiPath")
     });
-    const barMessage: vscode.Disposable = vscode.window.setStatusBarMessage("Wikitext: Login...");
+    const barMessage: vscode.Disposable = vscode.window.setStatusBarMessage(i18n("wikitext-login", lang));
     try {
         const response: any = await bot.login(userInfo);
         // TODO:
-        vscode.window.showInformationMessage(`User "${response.lgusername}"(UserID:"${response.lguserid}") Login Result is "${response.result}". Login Token is "${response.token}".`
-        );
+        vscode.window.showInformationMessage(i18n("login-result-success", lang, response.lgusername, response.lguserid, i18n(response.result, lang), response.token));
         return true;
     }
     catch (error) {
@@ -50,7 +50,7 @@ export async function login(): Promise<boolean> {
 
 export async function logout(): Promise<void> {
     await bot?.getEditToken();
-    const barMessage: vscode.Disposable = vscode.window.setStatusBarMessage("Wikitext: Logout...");
+    const barMessage: vscode.Disposable = vscode.window.setStatusBarMessage(i18n("wikitext-logout", lang));
     try {
         // it will be {} if success
         await bot?.request({
@@ -59,7 +59,7 @@ export async function logout(): Promise<void> {
         });
         // clear bot
         bot = undefined;
-        vscode.window.showInformationMessage('result: Success');
+        vscode.window.showInformationMessage(i18n("logout-result-success", lang));
     }
     catch (error) {
         showMWErrorMessage('logout', error);
@@ -92,20 +92,20 @@ export async function getLoggedInBot(): Promise<MWBot | undefined> {
             case 'Always':
                 return await login() ? bot : undefined;
             case 'Never':
-                vscode.window.showWarningMessage('You are not logged in. Please log in and try again.');
+                vscode.window.showWarningMessage(i18n("error-no-logged-in", lang));
                 return undefined;
             case 'Ask me':
             default:
-                switch (await vscode.window.showWarningMessage("You are not logged in. Do you want to login now?", 'Yes', 'No', 'Always', 'Never')) {
-                    case 'Always':
+                switch (await vscode.window.showWarningMessage(i18n("login-ask", lang), i18n("button-yes", lang), i18n("button-no", lang), i18n("button-always", lang), i18n("button-never", lang))) {
+                    case i18n("button-always", lang):
                         config.update('autoLogin', 'Always', true);
                         return await login() ? bot : undefined;
-                    case 'Yes':
+                    case i18n("button-yes", lang):
                         return await login() ? bot : undefined;
-                    case 'Never':
+                    case i18n("button-never", lang):
                         config.update('autoLogin', 'Never', true);
                         return undefined;
-                    case 'No':
+                    case i18n("button-no", lang):
                     case undefined:
                     default:
                         return undefined;
