@@ -4,7 +4,7 @@
 ################################################################################################
 
 ---
-name: "VSCEPublish"
+name: "MarketsPublish"
 
 on:
   # Start action after created a release
@@ -31,14 +31,19 @@ jobs:
 
       - name: Build
         run: |
-          npm install yarn vsce -g
+          npm install -g yarn vsce ovsx
           yarn install
 
       - name: Test
         run: xvfb-run -a yarn test
 
-      - name: Publish
+      - name: Publish to VSCE
         if: ${{ success() }}
-        run: yarn run deploy
+        run: vsce publish --yarn
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      - name: Publish to OVSX
+        if: ${{ success() }}
+        run: ovsx publish --yarn
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}

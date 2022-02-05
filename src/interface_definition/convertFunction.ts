@@ -6,6 +6,8 @@
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 function invalidValue(typ: Typ, val: unknown, key: any = ''): never {
     if (key) {
         throw Error(`Invalid value for key "${key}". Expected type ${JSON.stringify(typ)} but got ${JSON.stringify(val)}`);

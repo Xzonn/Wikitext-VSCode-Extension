@@ -12,6 +12,7 @@ import { getDefaultBot, getLoggedInBot } from './bot';
 import { TokensConvert, TokensResult } from '../../interface_definition/tokensInterface';
 import { showMWErrorMessage } from './err_msg';
 import { lang, i18n } from '../i18n_function/i18n';
+import { TagsConvert, TagsResult } from '../../interface_definition/tagsInterface';
 
 interface ContentInfo {
     content: string;
@@ -218,6 +219,18 @@ export function closeEditor(): Thenable<void | undefined> | undefined {
 type PageInfo = "pageTitle" | "pageID" | "revisionID" | "contentModel" | "contentFormat";
 
 export async function getPageCode(args: Record<string, string>, tBot: MWBot, replace = false): Promise<vscode.TextDocument | undefined> {
+    function modelNameToLanguage(modelName: string | undefined): string {
+        switch (modelName) {
+            case undefined:
+                return 'wikitext';
+            case 'flow-board':
+                return 'jsonc';
+            case 'sanitized-css':
+                return 'css';
+            default:
+                return modelName;
+        }
+    }
     function getInfoHead(info: Record<PageInfo, string | undefined>): string {
         const commentList: Record<string, [string, string]> = {
             wikitext: ["", ""],
@@ -226,7 +239,8 @@ export async function getPageCode(args: Record<string, string>, tBot: MWBot, rep
             javascript: ["/*", "*/"],
             css: ["/*", "*/"],
             php: ["/*", "*/"],
-            'flow-board': ["/*", "*/"],
+            // 'flow-board': ["/*", "*/"],
+            // 'sanitized-css': ["/*", "*/"],
         };
         const headInfo: Record<string, string | undefined> = {
             comment: i18n("page-info-comment", lang),
@@ -235,7 +249,8 @@ export async function getPageCode(args: Record<string, string>, tBot: MWBot, rep
         const infoLine: string = Object.keys(headInfo).
             map((key: string) => `    ${key} = #${headInfo[key] ?? ''}#`).
             join("\r");
-        return commentList[info?.['contentModel'] || "wikitext"].join(`<%-- [PAGE_INFO]
+        console.log(info?.['contentModel']);
+        return commentList[modelNameToLanguage(info?.['contentModel'])].join(`<%-- [PAGE_INFO]
 ${infoLine}
 [END_PAGE_INFO] --%>`);
     }
@@ -305,7 +320,7 @@ ${infoLine}
             });
         } else {
             const textDocument: vscode.TextDocument = await vscode.workspace.openTextDocument({
-                language: (content?.contentmodel === "flow-board") ? "jsonc" : info.contentModel,
+                language: modelNameToLanguage(info.contentModel),
                 content: infoHead + "\r\r" + content?.["*"]
             });
             vscode.window.showTextDocument(textDocument);
@@ -365,18 +380,16 @@ async function getValidTagList(tBot: MWBot): Promise<string[]> {
     };
 
     const tagList: string[] = [];
-    // TODO: interface
     for (; ;) {
-        const result: any = await tBot.request(args);
-        const tags: any[] = result.query.tags;
+        const result: unknown = await tBot.request(args);
+        const re: TagsResult = TagsConvert.toTagsResult(result);
+
         tagList.push(
-            ...tags.filter(tag =>
+            ...re.query.tags.filter(tag =>
                 tag.active !== undefined && tag.defined !== undefined
-            ).map(tag => tag.name as string));
-        if (result.continue !== undefined) {
-            Object.keys(result.continue)
-                .forEach(key => args[key] = result.continue[key]);
-        } else { break; }
+            ).map(tag => tag.name));
+        if (re.continue !== undefined) { Object.assign(args, re.continue); }
+        else { break; }
     }
 
     return tagList;

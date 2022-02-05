@@ -21,8 +21,19 @@
     "typescript.tsdk": "./node_modules/typescript/lib",
     "cmake.configureOnOpen": false,
     "cSpell.words": [
+        "caltaojihun",
+        "eqeqeq",
         "luxon",
         "mimetypes",
-        "mwbot"
-    ]
+        "mwbot",
+        "vsix",
+        "wikixml",
+        "Xvfb"
+    ],
+    "files.associations": {
+        "*.tmLanguage.json": "json-tmlanguage",
+        "*.tmLanguage.yaml": "yaml-tmlanguage"
+    },
+    "jshint.packageManager": "yarn",
+    "eslint.packageManager": "yarn",
 }
