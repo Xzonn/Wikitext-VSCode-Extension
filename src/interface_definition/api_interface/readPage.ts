@@ -69,7 +69,6 @@ export interface ReadPageResult {
     query?: Query;
     error?: MWError;
     warnings?: MWWarnings;
-
 }
 
 export interface Query {
@@ -121,6 +120,8 @@ export interface Revision {
      * slots.main.*: string
      */
     "*"?: string;
+    diff?: Diff;
+    moderation?: Moderation;
 }
 
 export interface Slots {
@@ -131,6 +132,16 @@ export interface Main {
     contentmodel?: string;
     contentformat?: string;
     "*"?: string;
+}
+
+export interface Diff {
+    "*"?: string;
+}
+
+export interface Moderation {
+    id?: number;
+    statusCode?: number;
+    userCanView?: string;
 }
 
 /** ReadPageResultConvert */
@@ -186,6 +197,8 @@ const readPageResultTypeMap: TypeMap = {
         { json: "contentmodel", js: "contentmodel", typ: u(undefined, "") },
         { json: "contentformat", js: "contentformat", typ: u(undefined, "") },
         { json: "*", js: "*", typ: u(undefined, "") },
+        { json: "diff", js: "diff", typ: u(undefined, r("Diff")) },
+        { json: "moderation", js: "moderation", typ: u(undefined, r("Moderation")) },
     ], false),
     "Slots": o([
         { json: "main", js: "main", typ: u(undefined, r("Main")) },
@@ -194,5 +207,13 @@ const readPageResultTypeMap: TypeMap = {
         { json: "contentmodel", js: "contentmodel", typ: u(undefined, "") },
         { json: "contentformat", js: "contentformat", typ: u(undefined, "") },
         { json: "*", js: "*", typ: u(undefined, "") },
+    ], false),
+    "Diff": o([
+        { json: "*", js: "*", typ: u(undefined, "") },
+    ], false),
+    "Moderation": o([
+        { json: "id", js: "id", typ: u(undefined, 0) },
+        { json: "status_code", js: "statusCode", typ: u(undefined, 0) },
+        { json: "user_can_view", js: "userCanView", typ: u(undefined, "") },
     ], false),
 };

@@ -22,10 +22,12 @@ export function activate(context: vscode.ExtensionContext): void {
     commandRegister.register('logout', showUnsupportedMessageFactory);
     // Core
     commandRegister.register('readPage', showUnsupportedMessageFactory);
+    commandRegister.register('readPageAndReplace', showUnsupportedMessageFactory);
     commandRegister.register('writePage', showUnsupportedMessageFactory);
     commandRegister.register('closeEditor', closeEditorFactory);
     // View
     commandRegister.register('getPreview', showUnsupportedMessageFactory);
+    commandRegister.register('getDiff', showUnsupportedMessageFactory);
     commandRegister.register('viewPage', showUnsupportedMessageFactory);
     // Cite
     commandRegister.register('citeWeb', showUnsupportedMessageFactory);

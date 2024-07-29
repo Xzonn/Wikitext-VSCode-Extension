@@ -19,6 +19,7 @@ rules:
   "curly": "warn"
   "eqeqeq": "warn"
   "no-throw-literal": "warn"
+  "no-useless-escape": "off"
   "semi": "off"
 ignorePatterns:
   - "out"

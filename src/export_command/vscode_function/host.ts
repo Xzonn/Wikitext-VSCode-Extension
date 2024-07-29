@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as vscode from 'vscode';
+import { i18n, lang } from '../i18n_function/i18n';
 
 export async function getHost(): Promise<string | undefined> {
     const config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("wikitext");
@@ -11,15 +12,13 @@ export async function getHost(): Promise<string | undefined> {
     // if host is existed, return it.
     if (host) { return host; }
     // else ask to edit
-    const selection: string | undefined = await vscode.window.showWarningMessage(
-        `No host defined!
-You haven't defined the host for the previewer yet; please input a host value in the dialog box (or in settings) and try again.`
-        , "Edit", "Cancel");
+    const edit = i18n("edit", lang);
+    const selection: string | undefined = await vscode.window.showWarningMessage(i18n("error-no-host-defined", lang), edit, i18n("cancel", lang));
     // edit
-    if (selection === 'Edit') {
+    if (selection === edit) {
         // show the input box
         const input: string | undefined = await vscode.window.showInputBox({
-            prompt: "Please input the host of previewer.",
+            prompt: i18n("enter-host-name", lang),
             placeHolder: "en.wikipedia.org",
             value: config.get("host") || "en.wikipedia.org",
             ignoreFocusOut: false

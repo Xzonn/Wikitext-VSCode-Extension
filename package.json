@@ -1,26 +1,33 @@
 {
-  "name": "wikitext",
-  "displayName": "Wikitext",
-  "description": "Wikitext is a document written in a wiki markup language. This extension provides functional support for the Wikitext language with MediaWiki such as Wikipedia.",
-  "version": "3.8.1",
-  "publisher": "RoweWilsonFrederiskHolme",
-  "license": "SEE LICENSE IN LICENSE.txt",
+  "name": "wikitext-xzonn",
+  "displayName": "Wikitext (Xzonn)",
+  "description": "%description%",
+  "version": "3.8.1-x.1",
+  "publisher": "Xzonn",
+  "license": "MIT",
   "author": {
     "name": "Rowe Wilson Frederisk Holme",
     "email": "frederisk@outlook.com",
     "url": "https://twitter.com/rwfholme"
   },
-  "homepage": "https://github.com/Frederisk/Wikitext-VSCode-Extension/blob/master/README.md",
+  "contributors": [
+    {
+      "name": "Xzonn",
+      "email": "Xzonn@outlook.com",
+      "url": "https://xzonn.top/"
+    }
+  ],
+  "homepage": "https://github.com/Xzonn/WikitextVSCodeExtension/blob/master/README.md",
   "icon": "media/wikitext-icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Frederisk/Wikitext-VSCode-Extension.git"
+    "url": "https://github.com/Xzonn/WikitextVSCodeExtension.git"
   },
   "bugs": {
-    "url": "https://github.com/Frederisk/Wikitext-VSCode-Extension/issues",
+    "url": "https://github.com/Xzonn/WikitextVSCodeExtension/issues",
     "email": "frederisk@outlook.com"
   },
-  "qna": "https://github.com/Frederisk/Wikitext-VSCode-Extension/discussions/categories/q-a",
+  "qna": "https://github.com/Xzonn/WikitextVSCodeExtension/discussions/categories/q-a",
   "engines": {
     "vscode": "^1.64.0"
   },
@@ -39,43 +46,53 @@
     "commands": [
       {
         "command": "wikitext.getPreview",
-        "title": "Get preview",
+        "title": "%wikitext.getPreview.title%",
         "category": "Wikitext",
         "icon": "$(open-preview)"
       },
       {
+        "command": "wikitext.getDiff",
+        "title": "%wikitext.getDiff.title%",
+        "category": "Wikitext"
+      },
+      {
         "command": "wikitext.login",
-        "title": "Login with your account",
+        "title": "%wikitext.login.title%",
         "category": "Wikitext"
       },
       {
         "command": "wikitext.logout",
-        "title": "Logout, if you are already logged in",
+        "title": "%wikitext.logout.title%",
         "category": "Wikitext"
       },
       {
         "command": "wikitext.readPage",
-        "title": "Pull page to edit",
+        "title": "%wikitext.readPage.title%",
+        "category": "Wikitext"
+      },
+      {
+        "command": "wikitext.readPageAndReplace",
+        "title": "%wikitext.readPageAndReplace.title%",
         "category": "Wikitext"
       },
       {
         "command": "wikitext.writePage",
-        "title": "Post your edit to the website",
+        "title": "%wikitext.writePage.title%",
         "category": "Wikitext"
       },
       {
         "command": "wikitext.viewPage",
-        "title": "View the page",
+        "title": "%wikitext.viewPage.title%",
         "category": "Wikitext"
       },
       {
         "command": "wikitext.citeWeb",
-        "title": "Add a web citation",
+        "title": "%wikitext.citeWeb.title%",
         "category": "Wikitext"
       },
       {
         "command": "wikitext.closeEditor",
-        "title": "Close this editor without saving",
+        "title": "%wikitext.closeEditor.title%",
         "category": "Wikitext"
       }
     ],
@@ -94,6 +111,11 @@
           "group": "navigation"
         },
         {
+          "command": "wikitext.getDiff",
+          "when": "editorLangId == wikitext",
+          "group": "navigation"
+        },
+        {
           "command": "wikitext.login",
           "group": "navigation"
         },
@@ -104,6 +126,11 @@
         {
           "command": "wikitext.readPage",
           "group": "navigation"
+        },
+        {
+          "command": "wikitext.readPageAndReplace",
+          "group": "navigation",
+          "when": "editorLangId == wikitext"
         },
         {
           "command": "wikitext.writePage",
@@ -177,45 +204,67 @@
       "properties": {
         "wikitext.host": {
           "type": "string",
-          "description": "The host that provides the API, such as 'en.wikipedia.org'."
+          "description": "%wikitext.host.description%"
         },
         "wikitext.userName": {
           "type": "string",
-          "description": "The user name of wikimedia site."
+          "description": "%wikitext.userName.description%"
         },
         "wikitext.password": {
           "type": "string",
-          "description": "The password of user. It will be fixed in the software settings, please do not fill in the device in public places."
+          "description": "%wikitext.password.description%"
         },
         "wikitext.redirects": {
           "type": "boolean",
-          "description": "When the input page is a redirect page, jump automatically. Note that posting command will **not** be redirected.",
+          "description": "%wikitext.redirects.description%",
+          "default": true
+        },
+        "wikitext.converttitles": {
+          "type": "boolean",
+          "description": "%wikitext.converttitles.description%",
           "default": true
         },
         "wikitext.apiPath": {
           "type": "string",
-          "markdownDescription": "Set the basic path to obtain the API. If you are not sure, please check the `Special:Version` page of your site.",
+          "markdownDescription": "%wikitext.apiPath.markdownDescription%",
           "default": "/w/api.php"
         },
         "wikitext.getCss": {
           "type": "boolean",
-          "description": "Get CSS when previewing the page. Please note that this feature will greatly increase the extended workload, and some rendering effects may conflict with VSCode. To get the correct display, you may need to enable Previewer's JS support.",
+          "description": "%wikitext.getCss.description%",
           "default": false
         },
         "wikitext.enableJavascript": {
           "type": "boolean",
-          "description": "Enable Previewer's JS support. This feature may affect the performance of VSCode and introduce potential security risks.",
+          "description": "%wikitext.enableJavascript.description%",
           "default": false
         },
         "wikitext.articlePath": {
           "type": "string",
-          "markdownDescription": "Set the basic path to obtain the article. please check the `Special:Version` page of your site (No need for `$1`).",
+          "markdownDescription": "%wikitext.articlePath.markdownDescription%",
           "default": "/wiki/"
         },
         "wikitext.webCiteFormat": {
           "type": "string",
-          "markdownDescription": "Setting the generation of web reference tags. The configuration of this option is similar to the code section of MakeRef in meta wikimedia. The available fields: `url`, `title`, `accessdate`, `website`, `archiveurl` ,and `archivedate`.\n\n**This function is only a preview function, it may change or become a separate new extension in the future. Please pay attention to the changelog of this function every time you update this extension.**",
-          "default": "{{cite web<!url> |url={$url}</!url><!title> |title={$title}</!title><!accessdate> |access-date={$accessdate}</!accessdate><!website> |website={$website}</!website><!publicationdate> |publication-date={$publicationdate}</!publicationdate><!archiveurl> |archive-url={$archiveurl}</!archiveurl><!archivedate> |archive-date={$archivedate}</!archivedate>}}"
+          "markdownDescription": "%wikitext.webCiteFormat.markdownDescription%",
+          "default": "{{cite web<!author> |author={$author}</!author><!url> |url={$url}</!url><!title> |title={$title}</!title><!accessdate> |access-date={$accessdate}</!accessdate><!website> |website={$website}</!website><!publicationdate> |publication-date={$publicationdate}</!publicationdate><!archiveurl> |archive-url={$archiveurl}</!archiveurl><!archivedate> |archive-date={$archivedate}</!archivedate><!language> |language={$language}</!language>}}"
+        },
+        "wikitext.webCiteArchive": {
+          "type": "boolean",
+          "description": "%wikitext.webCiteArchive.description%",
+          "default": true
+        },
+        "wikitext.webCiteAuthorSelector": {
+          "type": "string",
+          "markdownDescription": "%wikitext.webCiteAuthorSelector.markdownDescription%"
+        },
+        "wikitext.webCiteTitleSelector": {
+          "type": "string",
+          "markdownDescription": "%wikitext.webCiteTitleSelector.markdownDescription%"
+        },
+        "wikitext.webCiteDateSelector": {
+          "type": "string",
+          "markdownDescription": "%wikitext.webCiteDateSelector.markdownDescription%"
         },
         "wikitext.transferProtocol": {
           "type": "string",
@@ -228,7 +277,7 @@
             "HyperText Transfer Protocol",
             "HyperText Transfer Protocol Secure"
           ],
-          "description": "Select the transfer protocol used when accessing the API."
+          "description": "%wikitext.transferProtocol.description%"
         },
         "wikitext.previewCssStyle": {
           "type": "string",

@@ -14,7 +14,7 @@ export interface MWError {
 }
 
 export const mWErrorTypeMapInline: { json: string; js: string; typ: any; } = {
-    json: "warnings", js: "warnings", typ: u(undefined, r("MWError"))
+    json: "warnings", js: "warnings", typ: u(undefined, r("MWWarnings"))
 };
 
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -49,6 +49,7 @@ export const mWWarningsTypeMapInline: { json: string; js: string; typ: any; } = 
 export const mWWarningsTypeMapOutline: any = {
     "MWWarnings": o([
         { json: "main", js: "main", typ: r("WarnMain") },
+        { json: "revisions", js: "revisions", typ: u(undefined, r("WarnMain")) },
     ], false),
     "WarnMain": o([
         { json: "*", js: "*", typ: "" },
